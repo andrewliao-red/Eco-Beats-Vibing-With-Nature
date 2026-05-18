@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <title>Eco-Beats</title>
+
+  <link rel="stylesheet" href="style.css">
+
+  <!-- p5.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.4/p5.min.js"></script>
+</head>
+<body>
+
+  <!-- ========================= -->
+  <!-- MAIN UI -->
+  <!-- ========================= -->
+
+  <div id="top-bar">
+
+    <div id="live-clock" style="color: white; font-family: monospace; font-size: 16px; letter-spacing: 1px;"></div>
+
+    <div id="logo-section">
+      <h1>Eco-Beats</h1>
+      <p>Interactive Nature Music Ecosystem</p>
+    </div>
+
+    <div id="controls">
+
+      <div class="control-group">
+        <label>Season</label>
+
+        <select id="season-select">
+          <option value="spring">Spring</option>
+          <option value="summer">Summer</option>
+          <option value="autumn">Autumn</option>
+          <option value="winter">Winter</option>
+        </select>
+      </div>
+
+      <div class="control-group">
+        <label>Time</label>
+
+        <select id="time-select">
+          <option value="morning">Morning</option>
+          <option value="afternoon">Afternoon</option>
+          <option value="evening">Evening</option>
+          <option value="night">Night</option>
+        </select>
+      </div>
+
+      <div class="control-group">
+        <label>Weather</label>
+
+        <select id="weather-select">
+          <option value="clear">Clear</option>
+          <option value="rain">Rain</option>
+          <option value="snow">Snow</option>
+          <option value="fog">Fog</option>
+          <option value="storm">Storm</option>
+        </select>
+      </div>
+
+    </div>
+  </div>
+
+    <!-- BOTTOM PLAYER BAR -->
+    <div id="player-bar">
+
+      <div id="player-content-wrap">
+        <div class="player-info">
+          <h4 id="current-song-title">Select a track</h4>
+          <p id="current-nature-type">Nature Piece</p>
+        </div>
+
+        <div class="player-controls">
+          <div class="control-buttons">
+            <button id="master-play-pause">PLAY</button>
+          </div>
+          
+          <div class="timeline-container">
+            <span id="current-time">0:00</span>
+            <input type="range" id="timeline" value="0" min="0" max="100">
+            <span id="total-duration">0:00</span>
+          </div>
+        </div>
+
+        <div class="volume-container">
+          <label>VOL</label>
+          <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="0.5">
+        </div>
+      </div>
+    </div>
+
+  <!-- ========================= -->
+  <!-- CANVAS -->
+  <!-- ========================= -->
+
+  <canvas id="audio-visualizer"></canvas>
+
+  <div id="canvas-container"></div>
+
+  <!-- ========================= -->
+  <!-- MUSIC SIDEBAR -->
+  <!-- ========================= -->
+
+  <div id="sidebar">
+
+    <div id="sidebar-header">
+      <h2 id="nature-title">Forest Leaf</h2>
+      <button id="close-sidebar">✕</button>
+    </div>
+
+    <div id="sidebar-content">
+
+      <p class="nature-description">
+        Ambient forest atmosphere with drifting winds and soft instrumental textures.
+      </p>
+
+      <div class="playlist">
+
+        <div class="song">
+          <span>Forest Drift</span>
+          <button>PLAY</button>
+        </div>
+
+        <div class="song">
+          <span>Soft Rainfall</span>
+          <button>PLAY</button>
+        </div>
+
+        <div class="song">
+          <span>Night Moss</span>
+          <button>PLAY</button>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <script src="script.js"></script>
+
+</body>
+</html>

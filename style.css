@@ -1,0 +1,655 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;800&display=swap');
+
+/* ========================= */
+/* GLOBAL */
+/* ========================= */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  overflow: hidden;
+  font-family: 'Inter', Arial, Helvetica, sans-serif; /* Upgraded font */
+  background: black;
+  color: white;
+}
+
+/* Ensure all UI layers explicitly capture the mouse */
+#top-bar, #sidebar, #player-bar {
+  pointer-events: auto;
+  cursor: default;
+}
+
+/* Ensure the canvas is strictly for the world interaction */
+canvas {
+  display: block;
+  cursor: crosshair; /* Optional: gives a different feel for the 'world' vs the 'menu' */
+}
+
+/* ========================= */
+/* TOP BAR */
+/* ========================= */
+
+#top-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100px;
+  padding: 20px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 100;
+  
+  backdrop-filter: blur(20px) saturate(120%);
+  background: rgba(0,0,0,0.3);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  
+  /* Smooth initialization */
+  transition: all 0.4s ease;
+}
+
+#logo-section h1 {
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
+
+#logo-section p {
+  font-size: 11px;
+  opacity: 0.6;
+  margin-top: 6px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+/* ========================= */
+/* CONTROLS */
+/* ========================= */
+
+#controls {
+  display: flex;
+  gap: 24px;
+}
+
+.control-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.control-group label {
+  font-size: 10px;
+  opacity: 0.6;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+}
+
+select {
+  width: 140px;
+  padding: 12px;
+  border: 1px solid rgba(255,255,255,0.1);
+  outline: none;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.08);
+  color: white;
+  backdrop-filter: blur(10px);
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  
+  /* Smooth lift animation */
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+select:hover {
+  background: rgba(255,255,255,0.15);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+  border-color: rgba(255,255,255,0.25);
+}
+
+option {
+  background: #111;
+  color: white;
+}
+
+/* ========================= */
+/* CANVAS */
+/* ========================= */
+
+#canvas-container {
+  position: absolute; /* Add this */
+  top: 0;             /* Add this */
+  left: 0;            /* Add this */
+  z-index: 0;         /* Add this */
+  width: 100vw;
+  height: 100vh;
+}
+
+canvas {
+  /* Slow fade when switching seasons/weather manually */
+  transition: filter 0.8s ease-in-out; 
+}
+
+/* ========================= */
+/* SIDEBAR */
+/* ========================= */
+
+#sidebar {
+  position: fixed;
+  top: 0;
+  right: -450px; /* Hidden slightly further back */
+  width: 420px;
+  height: 100vh;
+  background: rgba(10,10,10,0.85);
+  backdrop-filter: blur(40px);
+  border-left: 1px solid rgba(255,255,255,0.1);
+  z-index: 200;
+  
+  /* Modern App Slide-in curve */
+  transition: right 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: -20px 0 50px rgba(0,0,0,0.5);
+}
+
+#sidebar.active {
+  right: 0;
+}
+
+#sidebar-header {
+  padding: 30px 24px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+#nature-title {
+  font-size: 28px;
+  font-weight: 700;
+}
+
+#close-sidebar {
+  width: 40px;
+  height: 40px;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 50%; /* Circle shape */
+  cursor: pointer;
+  background: rgba(255,255,255,0.05);
+  color: white;
+  font-size: 18px;
+  
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  transition: all 0.3s ease;
+}
+
+#close-sidebar:hover {
+  background: white;
+  color: black;
+  transform: rotate(90deg) scale(1.1); /* Spin and pop effect */
+}
+
+#sidebar-content {
+  padding: 24px;
+}
+
+.nature-description {
+  font-size: 15px;
+  line-height: 1.6;
+  opacity: 0.7;
+  font-weight: 300;
+  margin-bottom: 30px;
+}
+
+/* ========================= */
+/* PLAYLIST */
+/* ========================= */
+
+.playlist {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.song {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  border-radius: 16px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid transparent;
+  
+  transition: all 0.3s ease;
+}
+
+.song:hover {
+  background: rgba(255,255,255,0.08);
+  border-color: rgba(255,255,255,0.1);
+  transform: translateX(4px); /* Slight nudge to the right */
+}
+
+.song span {
+  font-weight: 400;
+  letter-spacing: 0.5px;
+}
+
+.song button {
+  padding: 8px 18px;
+  border: none;
+  border-radius: 20px; /* Pill shape */
+  cursor: pointer;
+  background: white;
+  color: black;
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  
+  transition: all 0.25s ease;
+}
+
+.song button:hover {
+  background: #e0e0e0;
+  transform: scale(1.05); /* Button pop */
+  box-shadow: 0 4px 12px rgba(255,255,255,0.2);
+}
+
+/* ========================= */
+/* RESPONSIVE */
+/* ========================= */
+
+@media (max-width: 900px) {
+  #top-bar {
+    height: auto;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    padding: 20px;
+  }
+
+  #controls {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  #sidebar {
+    width: 100%;
+    right: -100%;
+  }
+}
+
+/* ========================= */
+/* VARIABLES */
+/* ========================= */
+:root {
+  /* --- SPRING SETTINGS --- */
+  --spring-opacity: 0.6;
+  --spring-scale: 1.0;
+  --spring-brightness: 255;
+
+  /* --- SUMMER SETTINGS --- */
+  --summer-opacity: 0.4;
+  --summer-scale: 1.15;
+  --summer-brightness: 255;
+
+  /* --- WINTER SETTINGS --- */
+  --winter-opacity: 0.5;
+  --winter-scale: 1.0;
+  --winter-brightness: 240;
+
+  /* --- AUTUMN SETTINGS --- */
+  --autumn-opacity: 0.6;
+  --autumn-scale: 1.1;
+  --autumn-brightness: 255;
+
+  /* --- VISUALIZER SETTINGS --- */
+  --vis-color: 255, 255, 255; /* RGB format: White */
+  --vis-opacity: 0.5;         /* 0.0 to 1.0 */
+  --vis-bar-width: 5.0;       /* Thickness of each bar */
+  --vis-glow: 15px;           /* Blur radius for the glow */
+}
+
+/* ========================= */
+/* CENTERED FLOATING PLAYER  */
+/* ========================= */
+
+#player-bar {
+  position: fixed;
+  bottom: 50px; /* Floating off the bottom */
+  left: 50%;
+  transform: translateX(-50%); /* Perfectly centered */
+  
+  width: 100%;
+  max-width: 800px; /* Keeps it compact on large screens */
+  height: 85px;
+  
+  padding: 0 25px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 30px;
+
+  /* Glassmorphism */
+  background: rgba(15, 15, 15, 0.75);
+  backdrop-filter: blur(25px) saturate(180%);
+  -webkit-backdrop-filter: blur(25px) saturate(180%);
+  
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 24px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 
+              inset 0 1px 1px rgba(255, 255, 255, 0.1);
+  
+  z-index: 1000;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Hover effect for the whole bar */
+#player-bar:hover {
+  backdrop-filter: blur(40px) saturate(200%);
+  background: rgba(20, 20, 20, 0.85);
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+/* SONG INFO SECTION */
+.player-info {
+  flex: 1;
+  min-width: 150px;
+}
+
+#current-song-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 2px;
+}
+
+#current-nature-type {
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+/* CONTROLS SECTION (CENTERED) */
+.player-controls {
+  flex: 3;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+#master-play-pause {
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+  
+  border: none;
+  border-radius: 16px;
+  background: #fff;
+  color: #000;
+  
+  font-size: 11px;
+  font-weight: 900;
+  cursor: pointer;
+  
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+#master-play-pause:hover {
+  transform: scale(1.08);
+  background: #f0f0f0;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+}
+
+#master-play-pause:active {
+  transform: scale(0.95);
+}
+
+#master-play-pause:hover { transform: scale(1.1); }
+
+/* TIMELINE BOX */
+.timeline-container {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+#current-time, #total-duration {
+  font-family: 'monospace'; /* Keeps numbers from jumping */
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.5);
+  width: 35px;
+}
+
+/* CUSTOM RANGE INPUT SLIDER */
+input[type="range"] {
+  -webkit-appearance: none;
+  background: transparent;
+  width: 100%;
+  cursor: pointer;
+}
+
+input[type="range"]::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  height: 14px;
+  width: 14px;
+  border-radius: 50%;
+  background: #fff;
+  margin-top: -4px; /* Centers thumb on track */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  transition: transform 0.2s ease;
+}
+
+input[type="range"]:hover::-webkit-slider-thumb {
+  transform: scale(1.3);
+}
+
+/* VOLUME SECTION */
+.volume-container {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+/* ========================= */
+/* THE FLOATING PLAYER DOCK  */
+/* ========================= */
+
+#current-song-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+#current-nature-type {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  color: rgba(255, 255, 255, 0.4);
+  text-transform: uppercase;
+}
+
+/* Center Control Cluster */
+.player-controls {
+  flex: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.control-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#master-play-pause {
+  background: #fff;
+  color: #000;
+  border: none;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  font-size: 12px;
+  font-weight: 900;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
+}
+
+#master-play-pause:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 20px rgba(255, 255, 255, 0.3);
+}
+
+#master-play-pause:active {
+  transform: scale(0.95);
+}
+
+/* Timeline & Scrubbing */
+.timeline-container {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.timeline-container span {
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.5);
+  min-width: 35px;
+}
+
+/* Custom Styled Range Input (Modern Minimalist) */
+input[type="range"] {
+  -webkit-appearance: none;
+  width: 100%;
+  background: transparent;
+}
+
+input[type="range"]::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  height: 12px;
+  width: 12px;
+  border-radius: 50%;
+  background: #fff;
+  cursor: pointer;
+  margin-top: -4px; /* Centers thumb on track */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  transition: all 0.2s ease;
+}
+
+input[type="range"]:hover::-webkit-slider-thumb {
+  transform: scale(1.3);
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+}
+
+/* Volume Section */
+.volume-container {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.volume-container label {
+  font-size: 9px;
+  font-weight: 900;
+  color: rgba(255, 255, 255, 0.3);
+}
+
+#volume-slider {
+  width: 80px;
+}
+
+/* Responsive Tweaks */
+@media (max-width: 768px) {
+  #player-bar {
+    width: 95%;
+    bottom: 30px;
+    height: 120px;
+    flex-wrap: wrap;
+    padding: 15px;
+  }
+  
+  .player-info { order: 1; flex: 1; }
+  .volume-container { order: 2; flex: 1; }
+  .player-controls { order: 3; flex-basis: 100%; margin-top: 10px; }
+}
+
+#player-bar {
+  display: flex;
+  flex-direction: column; /* Stack visualizer on top of controls */
+  justify-content: center;
+  align-items: center;
+  height: 130px; /* Increased height to accommodate the stack */
+  padding: 10px 30px;
+  z-index: 1000;
+}
+
+#audio-visualizer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100vw;   /* Full screen width */
+  height: 450px;  /* Large and impactful */
+  z-index: 10;    /* Sits above the background but below the UI bar */
+  pointer-events: none; /* Clicking through it allows you to hit nature pieces behind it */
+  opacity: 100%;
+}
+
+/* New wrapper to hold the info, buttons, and volume in a clean line */
+#player-content-wrap {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.player-controls {
+  flex: 2; /* Give the buttons and timeline more breathing room */
+}
